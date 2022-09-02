@@ -1,16 +1,24 @@
 let itemList = document.getElementById('items');
+
 let form = document.querySelector("#addForm");
+let filter = document.querySelector("#filter");
 
 form.addEventListener("submit" , addItem);
 itemList.addEventListener("click" , removeitem);
+filter.addEventListener('keyup' , filterItems);
 
 function addItem(e){
     e.preventDefault();
 
     var newItem = document.getElementById('item').value;
+    let newDesc = document.getElementById("description").value;
+
     let li = document.createElement('li');
+
     li.className="list-group-item";
     li.appendChild(document.createTextNode(newItem));
+    
+    li.appendChild(document.createTextNode(" "+ newDesc));
     itemList.appendChild(li);
 
     let deleteBtn = document.createElement('button');
@@ -32,4 +40,19 @@ function removeitem(e){
             itemList.removeChild(li);
         }
     }
+}
+
+function filterItems(e){
+    let input = e.target.value.toLowerCase();
+    let items = itemList.getElementsByTagName('li');
+    Array.from(items).forEach((item)=>{
+        let itemName = item.firstChild.textContent ;
+        let discname = item.childNodes[1].textContent ;
+
+        if(itemName.toLowerCase().indexOf(input)!= -1  || discname.toLowerCase().indexOf(input)!=-1){
+            item.style.display ="block";
+        } else{
+            item.style.display = "none";
+        }
+    })
 }
